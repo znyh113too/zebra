@@ -14,19 +14,17 @@ public class DefaultSQLRewrite implements SQLRewrite {
 		SQLStatement stmt = pr.getStmt();
 
 		StringBuilder out = new StringBuilder();
+        // TableName访问者将sql中的tableName换为逻辑表
 		RewriteTableNameOutputVisitor visitor = new RewriteTableNameOutputVisitor(out, logicalTable, physicalTable);
-
 		stmt.accept(visitor);
 
+        // 返回新的sql
 		return out.toString();
 	}
 
 	class RewriteTableNameOutputVisitor extends MySqlOutputVisitor {
-
 		private String physicalTable;
-
 		private String logicalTable;
-
 		public RewriteTableNameOutputVisitor(Appendable appender, String logicalTable, String physicalTable) {
 			super(appender);
 			this.logicalTable = logicalTable;
@@ -36,6 +34,8 @@ public class DefaultSQLRewrite implements SQLRewrite {
 		@Override
 		public boolean visit(SQLExprTableSource x) {
 			SQLName name = (SQLName) x.getExpr();
+
+            // 主要是将逻辑表替换为物理表
 			if (logicalTable.equalsIgnoreCase(name.getSimpleName())) {
 				print0(physicalTable);
 			} else {

@@ -5,6 +5,9 @@ import java.util.Formatter;
 
 import com.dianping.zebra.group.config.system.transform.DefaultXmlBuilder;
 
+/**
+ * 抽象元素类
+ */
 public abstract class BaseEntity<T> implements IEntity<T>, Formattable {
 
    public static final String XML = "%.3s";

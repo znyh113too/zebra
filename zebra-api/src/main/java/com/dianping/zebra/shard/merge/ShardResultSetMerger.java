@@ -15,19 +15,19 @@
  */
 package com.dianping.zebra.shard.merge;
 
-import java.sql.ResultSet;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import com.alibaba.druid.sql.ast.statement.SQLSelectItem;
 import com.dianping.zebra.shard.merge.distinct.DistinctDataMerger;
 import com.dianping.zebra.shard.merge.groupby.GroupByDataMerger;
 import com.dianping.zebra.shard.merge.orderby.OrderByDataMerger;
 import com.dianping.zebra.shard.router.RouterResult;
 import com.dianping.zebra.shard.router.RouterResult.RouterTarget;
+
+import java.sql.ResultSet;
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * <p>
@@ -71,6 +71,7 @@ public class ShardResultSetMerger {
 			adaptor.setResultSets(actualResultSets);
 		} else {
 			adaptor.setResultSets(actualResultSets);
+            // 将ResultSet转到RowData用于后续操作
 			List<RowData> rowDatas = popResultSets(actualResultSets, mergeContext);
 
 			if (rowDatas == null || rowDatas.size() == 0) {
@@ -78,6 +79,7 @@ public class ShardResultSetMerger {
 				return;
 			}
 
+            // 进行一些默认的merge操作,去重,分组
 			List<RowData> afterDistinctDatas = distinctMerger.process(rowDatas, mergeContext);
 			List<RowData> afterGroupByDatas = groubyMerger.process(afterDistinctDatas, mergeContext);
 			List<RowData> afterOrderByDatas = orderbyMerger.process(afterGroupByDatas, mergeContext);

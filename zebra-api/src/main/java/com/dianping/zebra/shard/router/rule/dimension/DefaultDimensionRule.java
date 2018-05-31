@@ -24,13 +24,13 @@ import java.util.Set;
 
 import com.dianping.zebra.shard.config.TableShardDimensionConfig;
 import com.dianping.zebra.shard.router.rule.ShardEvalContext;
-import com.dianping.zebra.shard.router.rule.ShardEvalResult;
 import com.dianping.zebra.shard.router.rule.ShardEvalContext.ColumnValue;
+import com.dianping.zebra.shard.router.rule.ShardEvalResult;
 import com.dianping.zebra.shard.router.rule.engine.GroovyRuleEngine;
 import com.dianping.zebra.shard.router.rule.engine.RuleEngine;
+import com.dianping.zebra.shard.router.rule.tableset.DefaultTableSetsManager;
 import com.dianping.zebra.shard.router.rule.tableset.TableSets;
 import com.dianping.zebra.shard.router.rule.tableset.TableSetsManager;
-import com.dianping.zebra.shard.router.rule.tableset.DefaultTableSetsManager;
 
 /**
  * 
@@ -85,6 +85,7 @@ public class DefaultDimensionRule extends AbstractDimensionRule {
 			if (!evalContext.isUsed()) {
 				evalContext.setUsed(true);
 
+                // 将维度值参数通过解析器解析,获取数据库下标和表名下标
 				Number dbPos = (Number) dbRuleEngine.eval(evalContext.getValue());
 				TableSets tableSet = tablesMappingManager.getTableSetsByPos(dbPos.intValue());
 				Number tablePos = (Number) tableRuleEngine.eval(evalContext.getValue());

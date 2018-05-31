@@ -56,18 +56,24 @@ public class DefaultShardRouter implements ShardRouter {
 
 	@Override
 	public RouterResult router(final String sql, List<Object> params) throws ShardRouterException, ShardParseException {
+        // 路由结果
 		RouterResult routerResult = new RouterResult();
+
+        // 获得解析之后的sql对象
 		SQLParsedResult parsedResult = SQLParser.parse(sql);
 
+        // 获得对应配置的rule
 		TableShardRule tableShardRule = findShardRule(parsedResult.getRouterContext(), params);
+
+        // 此时已经拿到根据rule解析之后的具体的db和table
 		ShardEvalResult shardResult = tableShardRule.eval(new ShardEvalContext(parsedResult, params));
 
 		MergeContext mergeContext = new MergeContext(parsedResult.getMergeContext());
 
+        // 重写sql,组装结果对象返回(将逻辑表名改为刚才解析之后的实际物理表名)
 		routerResult.setMergeContext(mergeContext);
 		routerResult.setSqls(buildSqls(shardResult.getDbAndTables(), parsedResult, tableShardRule.getTableName()));
 		routerResult.setParams(buildParams(params, routerResult));
-
 		return routerResult;
 	}
 
@@ -113,6 +119,8 @@ public class DefaultShardRouter implements ShardRouter {
 			RouterTarget targetedSql = new RouterTarget(entry.getKey());
 
 			for (String physicalTable : entry.getValue()) {
+
+                // 获得换了表名的新sql
 				String _sql = sqlRewrite.rewrite(parseResult, logicTable, physicalTable);
 
 				String hintComment = parseResult.getRouterContext().getSqlhint().getForceMasterComment();

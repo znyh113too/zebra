@@ -6,6 +6,9 @@ import static com.dianping.zebra.group.config.system.Constants.ENTITY_SQL_FLOW_C
 import com.dianping.zebra.group.config.system.BaseEntity;
 import com.dianping.zebra.group.config.system.IVisitor;
 
+/**
+ * 元素类
+ */
 public class SqlFlowControl extends BaseEntity<SqlFlowControl> {
    private String m_sqlId;
 
@@ -41,13 +44,28 @@ public class SqlFlowControl extends BaseEntity<SqlFlowControl> {
       return m_allowPercent;
    }
 
+    public SqlFlowControl setAllowPercent(int allowPercent) {
+        m_allowPercent = allowPercent;
+        return this;
+    }
+
    public String getApp() {
       return m_app;
    }
 
+    public SqlFlowControl setApp(String app) {
+        m_app = app;
+        return this;
+    }
+
    public String getSqlId() {
       return m_sqlId;
    }
+
+    public SqlFlowControl setSqlId(String sqlId) {
+        m_sqlId = sqlId;
+        return this;
+    }
 
    @Override
    public int hashCode() {
@@ -67,21 +85,6 @@ public class SqlFlowControl extends BaseEntity<SqlFlowControl> {
       if (other.getApp() != null) {
          m_app = other.getApp();
       }
-   }
-
-   public SqlFlowControl setAllowPercent(int allowPercent) {
-      m_allowPercent = allowPercent;
-      return this;
-   }
-
-   public SqlFlowControl setApp(String app) {
-      m_app = app;
-      return this;
-   }
-
-   public SqlFlowControl setSqlId(String sqlId) {
-      m_sqlId = sqlId;
-      return this;
    }
 
 }

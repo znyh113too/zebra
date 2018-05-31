@@ -4,11 +4,23 @@ import com.dianping.zebra.group.config.system.entity.DataCenter;
 import com.dianping.zebra.group.config.system.entity.SqlFlowControl;
 import com.dianping.zebra.group.config.system.entity.SystemConfig;
 
+/**
+ * 抽象访问者
+ */
 public interface IVisitor {
 
-   public void visitDataCenter(DataCenter dataCenter);
+    /**
+     * 访问数据中心
+     */
+    void visitDataCenter(DataCenter dataCenter);
 
-   public void visitSqlFlowControl(SqlFlowControl sqlFlowControl);
+    /**
+     * 访问sql flow control
+     */
+    void visitSqlFlowControl(SqlFlowControl sqlFlowControl);
 
-   public void visitSystemConfig(SystemConfig systemConfig);
+    /**
+     * 访问system config
+     */
+    void visitSystemConfig(SystemConfig systemConfig);
 }

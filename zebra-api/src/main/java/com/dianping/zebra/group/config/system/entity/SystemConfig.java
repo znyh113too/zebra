@@ -6,6 +6,9 @@ import java.util.Map;
 import com.dianping.zebra.group.config.system.BaseEntity;
 import com.dianping.zebra.group.config.system.IVisitor;
 
+/**
+ * 元素类
+ */
 public class SystemConfig extends BaseEntity<SystemConfig> {
    private int m_retryTimes = 0;
 
@@ -83,6 +86,11 @@ public class SystemConfig extends BaseEntity<SystemConfig> {
       return m_retryTimes;
    }
 
+    public SystemConfig setRetryTimes(int retryTimes) {
+        m_retryTimes = retryTimes;
+        return this;
+    }
+
    public Map<String, SqlFlowControl> getSqlFlowControls() {
       return m_sqlFlowControls;
    }
@@ -118,11 +126,6 @@ public class SystemConfig extends BaseEntity<SystemConfig> {
       }
 
       return false;
-   }
-
-   public SystemConfig setRetryTimes(int retryTimes) {
-      m_retryTimes = retryTimes;
-      return this;
    }
 
 }

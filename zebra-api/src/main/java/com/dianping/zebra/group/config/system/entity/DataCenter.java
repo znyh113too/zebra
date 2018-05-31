@@ -6,6 +6,9 @@ import static com.dianping.zebra.group.config.system.Constants.ENTITY_DATA_CENTE
 import com.dianping.zebra.group.config.system.BaseEntity;
 import com.dianping.zebra.group.config.system.IVisitor;
 
+/**
+ * 元素类
+ */
 public class DataCenter extends BaseEntity<DataCenter> {
    private String m_name;
 
@@ -39,9 +42,19 @@ public class DataCenter extends BaseEntity<DataCenter> {
       return m_ipPrefix;
    }
 
+    public DataCenter setIpPrefix(String ipPrefix) {
+        m_ipPrefix = ipPrefix;
+        return this;
+    }
+
    public String getName() {
       return m_name;
    }
+
+    public DataCenter setName(String name) {
+        m_name = name;
+        return this;
+    }
 
    @Override
    public int hashCode() {
@@ -59,16 +72,6 @@ public class DataCenter extends BaseEntity<DataCenter> {
       if (other.getIpPrefix() != null) {
          m_ipPrefix = other.getIpPrefix();
       }
-   }
-
-   public DataCenter setIpPrefix(String ipPrefix) {
-      m_ipPrefix = ipPrefix;
-      return this;
-   }
-
-   public DataCenter setName(String name) {
-      m_name = name;
-      return this;
    }
 
 }

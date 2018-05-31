@@ -15,10 +15,6 @@
  */
 package com.dianping.zebra.shard.router.rule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.dianping.zebra.shard.api.ShardDataSourceHelper;
 import com.dianping.zebra.shard.exception.ShardRouterException;
 import com.dianping.zebra.shard.parser.SQLHint;
@@ -26,6 +22,10 @@ import com.dianping.zebra.shard.router.rule.ShardEvalContext.ColumnValue;
 import com.dianping.zebra.shard.router.rule.dimension.DimensionRule;
 import com.dianping.zebra.shard.util.ShardColumnValueUtil;
 import com.dianping.zebra.util.SqlType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class TableShardRule {
 
@@ -45,11 +45,13 @@ public class TableShardRule {
 		SqlType type = ctx.getParseResult().getType();
 
 		try {
-			// force dimension from hint
 			SQLHint sqlhint = ctx.getParseResult().getRouterContext().getSqlhint();
 			if (sqlhint != null & sqlhint.getShardColumn() != null) {
+                // 获取此条sql对应的rule
 				DimensionRule rule = findDimensionRule(sqlhint.getShardColumn());
 				if (rule != null) {
+
+                    // 执行规则表达式,返回结果
 					ShardEvalResult result = evalDimension(ctx, type, rule);
 
 					if (result != null) {
@@ -94,11 +96,13 @@ public class TableShardRule {
 	}
 
 	private ShardEvalResult evalDimension(ShardEvalContext ctx, SqlType type, DimensionRule rule) {
+        // 获得解析规则对应sql中传入的参数值,放入到上下文ShardEvalContext中,这里看的出来支持多个维度
 		List<ColumnValue> columnValues = ShardColumnValueUtil.eval(ctx, rule.getShardColumns());
 		ctx.setColumnValues(columnValues);
 
 		if (columnValues.size() > 0) {
 			if (type == SqlType.SELECT) {
+                // OK参数就绪,进行规则解析
 				return rule.eval(ctx);
 			} else if (type == SqlType.INSERT || type == SqlType.UPDATE || type == SqlType.DELETE) {
 				if (rule.isMaster()) {

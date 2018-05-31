@@ -16,6 +16,9 @@ import com.dianping.zebra.group.config.system.entity.DataCenter;
 import com.dianping.zebra.group.config.system.entity.SqlFlowControl;
 import com.dianping.zebra.group.config.system.entity.SystemConfig;
 
+/**
+ * 默认访问者
+ */
 public class DefaultXmlBuilder implements IVisitor {
 
    private IVisitor m_visitor = this;
@@ -40,6 +43,9 @@ public class DefaultXmlBuilder implements IVisitor {
       m_sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n");
    }
 
+    /**
+     * 去访问
+     */
    public String buildXml(IEntity<?> entity) {
       entity.accept(m_visitor);
       return m_sb.toString();

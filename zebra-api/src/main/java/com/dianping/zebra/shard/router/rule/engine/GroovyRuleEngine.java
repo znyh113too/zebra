@@ -32,9 +32,8 @@ import groovy.lang.GroovyObject;
  */
 public class GroovyRuleEngine implements RuleEngine {
 
-	private final GroovyObject engineObj;
-
 	private static final Map<String, Class<?>> RULE_CLASS_CACHE = new ConcurrentHashMap<String, Class<?>>();
+    private final GroovyObject engineObj;
 
 	public GroovyRuleEngine(String rule) {
 		try {
@@ -51,7 +50,9 @@ public class GroovyRuleEngine implements RuleEngine {
 			synchronized (GroovyRuleEngine.class) {
 				if (!RULE_CLASS_CACHE.containsKey(rule)) {
 					Matcher matcher = DimensionRule.RULE_COLUMN_PATTERN.matcher(rule);
+                    // 动态生成class文件并加载,这个execute方法的所执行的是你在外面填的rule规则,并且将参数值换成了实际的sql参数值
 					StringBuilder engineClazzImpl = new StringBuilder(200)
+                            // 新的RuleEngineBaseImpl对象继承了RuleEngineBase类,这个类提供了一些默认的函数供我们调用
 							.append("class RuleEngineBaseImpl extends " + RuleEngineBase.class.getName() + "{")
 							.append("Object execute(Map context) {").append(matcher.replaceAll("context.get(\"$1\")"))
 							.append("}").append("}");
@@ -66,6 +67,8 @@ public class GroovyRuleEngine implements RuleEngine {
 
 	@Override
 	public Object eval(Map<String, Object> valMap) {
+        // 这里将#参数#里的参数从rule中替换成"context.get("参数")",从map中取出来真实的值,当然支持内置的一些方法调用和简单的java值计算
+        // e.g:crc32(context.get("bid"))%10
 		return engineObj.invokeMethod("execute", valMap);
 	}
 }
